@@ -9,4 +9,4 @@ tecnologias
 - javascript
 
 como rodar
-- node index.js
+- node index.jsgi
