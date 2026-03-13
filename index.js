@@ -10,15 +10,15 @@ app.use(express.json());
 /*
 CLIENTES ENDPOINTS
  */
-const clientes = path.join(__dirname, 'clientes.json');
+const clientesPath = path.join(__dirname, 'clientes.json');
 
 function lerClientes() {
-    if(!fs.existsSync(clientes)){
+    if(!fs.existsSync(clientesPath)){
         return [];
     }
 
 
-    const dados = fs.readFileSync(clientes, 'utf8');
+    const dados = fs.readFileSync(clientesPath, 'utf8');
     try{
        return JSON.parse(dados)  || [];
 
@@ -28,7 +28,7 @@ function lerClientes() {
 }
 
 function salvarClientes(clientes) {
-  fs.writeFileSync(clientes, JSON.stringify(clientes, null, 2), 'utf-8');
+  fs.writeFileSync(clientesPath, JSON.stringify(clientes, null, 2), 'utf-8');
 } 
 
 app.post('/clientes', (req, res) => {
