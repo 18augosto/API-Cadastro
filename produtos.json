@@ -4,5 +4,11 @@
     "nome": "Produto Teste",
     "valor": 99.9,
     "descricao": "Descrição do produto"
+  },
+  {
+    "id": "7",
+    "nome": "Produto Teste",
+    "valor": 99.9,
+    "descricao": "Descrição do produto"
   }
 ]
