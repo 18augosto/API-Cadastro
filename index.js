@@ -68,7 +68,6 @@ app.get('/clientes/:cpf', (req, res) => {
     res.status(200).json(cliente);
 });
 
-    
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
