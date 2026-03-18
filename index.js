@@ -22,7 +22,6 @@ function lerClientes() {
         return [];
     }
 
-
     const dados = fs.readFileSync(clientesPath, 'utf8');
     try{
        return JSON.parse(dados)  || [];
@@ -74,8 +73,20 @@ app.post('/produtos', (req, res) => {
     res.status(201).json({ message: 'Produto criado com sucesso', produto: novoProduto});
 });
 
+app.get('/clientes', (req, res) => {
+    const clientes = lerClientes();
+    res.json(clientes);
+});
 
-    
+app.get('/clientes/:cpf', (req, res) => {
+    const clientes = lerClientes();
+    const cliente = clientes.find(c => c.cpf === req.params.cpf);
+    if (!cliente) {
+        return res.status(404).json({ error: 'Cliente não encontrado' });
+    }
+    res.status(200).json(cliente);
+});
+
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
