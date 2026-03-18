@@ -33,25 +33,44 @@ function lerClientes() {
 
 function salvarClientes(clientes) {
   fs.writeFileSync(clientesPath, JSON.stringify(clientes, null, 2), 'utf-8');
+}
+
+function lerProdutos() {
+    if(!fs.existsSync(produtosPath)){
+        return [];
+    }
+    const dados = fs.readFileSync(produtosPath, 'utf8');
+    try{
+       return JSON.parse(dados)  || [];
+    }catch(e){
+       return [];
+    }
+}
+
+function salvarProdutos(produtos) {
+  fs.writeFileSync(produtosPath, JSON.stringify(produtos, null, 2), 'utf-8');
 } 
 
-app.post('/clientes', (req, res) => {
-    const { cpf, nome , email, endereco,bairro,contato } = req.body;
+app.post('/produtos', (req, res) => {
+    const { id, nome , valor, descricao } = req.body;
+    
+    // Debug para verificar os campos recebidos
+    console.log('Dados do produto recebidos:', { id, nome, valor, descricao });
   
-    if (!cpf || !nome || !email || !endereco || !bairro || !contato) {
+    if (!id || !nome || !valor || !descricao) {
         return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
     }
 
-    const clientes = lerClientes();
+    const produtos = lerProdutos();
     
-    if(clientes.some(c => c.cpf === cpf)){
-        return res.status(400).json({ error: 'CPF já cadastrado' });
+    if(produtos.some(p => p.id === id)){
+        return res.status(400).json({ error: 'ID já cadastrado' });
     }
 
-    const novoCliente = { cpf, nome, email, endereco, bairro, contato };
-    clientes.push(novoCliente);
-    salvarClientes(clientes);
-    res.status(201).json({ message: 'Cliente criado com sucesso', cliente: novoCliente});
+    const novoProduto = { id, nome, valor, descricao };
+    produtos.push(novoProduto);
+    salvarProdutos(produtos);
+    res.status(201).json({ message: 'Produto criado com sucesso', produto: novoProduto});
 });
 
 app.get('/clientes', (req, res) => {
@@ -71,46 +90,16 @@ app.get('/clientes/:cpf', (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
-
-
-
-function lerProdutos() {
-    if(!fs.existsSync(produtosPath)){
-        return [];
-    }
-
-    const dados = fs.readFileSync(produtosPath, 'utf8');
-    try{
-       return JSON.parse(dados)  || [];
-
-    }catch(e){
-       return [];
-    }
-}
-
-function salvarProdutos(produtos) {
-  fs.writeFileSync(produtosPath, JSON.stringify(produtos, null, 2), 'utf-8');
-} 
-
-app.post("/produtos", (req, res) => {
-    const {id, nome, valor, descrição} = req.body;
-    if (!id || !nome || !valor || !descrição) {
-        return res.status(400).json({ error:"Todos os campos são obrigatórios"});
-
-    }
+app.get("/produtos", (req, res) => {
     const produtos = lerProdutos();
-    if (produtos.some(p => p.id === id)) {
-        return res.status(400).json({ error: 'ID já cadastrado' });
-    }
-    const novoProduto = {
-        id,
-        nome,
-        valor,
-        descrição
-    };
-    produtos.push(novoProduto);
-    salvarProdutos(produtos);
-    res.status(201).json({message: 'Produto cadastrado com sucesso', produto: novoProduto});
-    
-}); 
+    res.status(200).json(produtos);
+});
 
+app.get("/produtos/:id", (req, res) => {
+    const produtos = lerProdutos();
+    const produto = produtos.find(p => p.id == req.params.id);
+    if (!produto) {
+        return res.status(404).json({ error: 'Produto não encontrado' });
+    }
+    res.status(200).json(produto);
+});
