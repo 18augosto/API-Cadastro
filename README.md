@@ -1,4 +1,4 @@
-esse é um projeto de API de usuarios
+esse é um projeto de cadastro de usuarios
 
 finalidade
 - criar uma api de usuarios
