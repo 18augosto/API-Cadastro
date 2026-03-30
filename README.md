@@ -1,7 +1,7 @@
-esse é um projeto de API de cadastro
+esse é um projeto de API de usuarios
 
 finalidade
-- criar uma api de cadastro de pessoas
+- criar uma api de usuarios
 
 tecnologias
 - node.js
@@ -9,4 +9,4 @@ tecnologias
 - javascript
 
 como rodar
-- node index.jsgi
+- node index.js

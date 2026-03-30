@@ -78,9 +78,9 @@ app.get('/clientes', (req, res) => {
     res.json(clientes);
 });
 
-app.get('/clientes/:cpf', (req, res) => {
+app.get('/clientes/:codigo', (req, res) => {
     const clientes = lerClientes();
-    const cliente = clientes.find(c => c.cpf === req.params.cpf);
+    const cliente = clientes.find(c => c.codigo === req.params.codigo);
     if (!cliente) {
         return res.status(404).json({ error: 'Cliente não encontrado' });
     }
